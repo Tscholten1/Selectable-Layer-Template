@@ -405,7 +405,7 @@
         map.addLayer(markersCluster_stops);
 
 
-        //        locate CHILDCARE objects in services_3 geoJSON, add them to map, with popup info available        
+        //        locate TRAINS objects in services_3 geoJSON, add them to map, with popup info available        
         var train = L.geoJson(trains, {
             pointToLayer: function(feature, latlng) {
                 var cMarker = L.marker([feature.geometry.coordinates[0][0][1], feature.geometry.coordinates[0][0][0]], {
@@ -429,8 +429,8 @@
                 var content = "<b>" + props.service_name + "</b></br>" + props.address;
                 layer.bindPopup(content);
             }
-        }).addTo(markersCluster_Chicago_fire);
-        map.addLayer(markersCluster_Chicago_fire);
+        }).addTo(markersCluster_trains);
+        map.addLayer(markersCluster_trains);
 
         //         
 
@@ -457,6 +457,59 @@
             });
         });
 
+         //        locate CHICAGO FIRE objects in services_3 geoJSON, add them to map, with popup info available        
+        var train = L.geoJson(markersCluster_Chicago_fire, {
+            polygonToLayer: function(feature, latlng) {
+                var cMarker = L.marker([feature.geometry.coordinates[0][0][1], feature.geometry.coordinates[0][0][0]], {
+                    icon: trainIcon
+                });
+                cMarker.on('mouseover', function(e) {
+                    cMarker.setIcon(trainSelectIcon);
+                });
+                cMarker.on('mouseout', function(e) {
+                    cMarker.setIcon(trainIcon);
+                });
+                return cMarker
+            },
+            filter: function(feature, layer) {
+                //if (feature.properties.service_type == "Childcare") {
+                return feature;
+                //}
+            },
+            onEachFeature: function(feature, layer) {
+                var props = feature.properties;
+                var content = "<b>" + props.service_name + "</b></br>" + props.address;
+                layer.bindPopup(content);
+            }
+        }).addTo(markersCluster_Chicago_fire);
+        map.addLayer(markersCluster_Chicago_fire);        
+
+        map.on('click', function(e) {
+            chicago_fire.eachLayer(function(layer) {
+                var distance = e.latlng.distanceTo(layer.getLatLng()) * (0.000621371);
+
+                var walkTime = distance / (3.1 / 60);
+                var bikeTime = distance / (9.0 / 60);
+                var carTime = distance / (25 / 60);
+
+                var hospitalName = layer.feature.properties.LABEL;
+                var hospitalAddress = layer.feature.properties.ADDRESS;
+                var content = "<b>" + hospitalName + ":</b><br>" + hospitalAddress + "<br>" +
+                    "You are <b>" + distance.toLocaleString() +
+                    "miles</b> from the click point.</br>" +
+                    "This trip would take</br>" +
+                    "<b>" + walkTime.toLocaleString() + "</b> min on foot</br>" +
+                    "<b>" + bikeTime.toLocaleString() + "</b> min by bike, and</br>" +
+                    "<b>" + carTime.toLocaleString() + "</b> min by car at 25 mph"
+
+                layer.bindPopup(content);
+
+            });
+        });
+        //  END
+        
+        
+        
         //        calculator for distance (in miles) and time (in minutes) to service with popup showing those values
         map.on('click', function(e) {
             market.eachLayer(function(layer) {
