@@ -210,9 +210,9 @@
         var pharmacySelectIcon = new MarkerIcon({
             iconUrl: 'Icons/pharmacy_yellow.png'
         });
-        var trainSelectIcon = new MarkerIcon({
-            iconUrl: 'Icons/train_yellow.png'
-        });
+//        var trainSelectIcon = new MarkerIcon({
+//            iconUrl: 'Icons/train_yellow.png'
+//        });
 
         var markersCluster_hospital = L.markerClusterGroup();
         var markersCluster_pharmacy = L.markerClusterGroup();
@@ -434,6 +434,36 @@
 
         //         
 
+                //        locate NEW DATA LAYER objects add them to map, with popup info available        
+ /*       var train = L.geoJson(Chicago_fire, {
+            polyToLayerToLayer: function(feature, latlng) {
+                var cMarker = L.marker([feature.geometry.coordinates[0][0][1], feature.geometry.coordinates[0][0][0]], {
+                    icon: trainIcon
+                });
+                cMarker.on('mouseover', function(e) {
+                    cMarker.setIcon(Chicago_fireSelectIcon);
+                });
+                cMarker.on('mouseout', function(e) {
+                    cMarker.setIcon(trainIcon);
+                });
+                return cMarker
+            },
+            filter: function(feature, layer) {
+                //if (feature.properties.service_type == "Childcare") {
+                return feature;
+                //}
+            },
+            onEachFeature: function(feature, layer) {
+                var props = feature.properties;
+                var content = "<b>" + props.service_name + "</b></br>" + props.address;
+                layer.bindPopup(content);
+            }
+        }).addTo(markersCluster_Chicago_fire);
+        map.addLayer(markersCluster_Chicago_fire);*/
+        //
+        
+        
+        
         map.on('click', function(e) {
             hospital.eachLayer(function(layer) {
                 var distance = e.latlng.distanceTo(layer.getLatLng()) * (0.000621371);
